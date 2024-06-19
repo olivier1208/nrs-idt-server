@@ -1,9 +1,9 @@
 module.exports = {
-    HOST: 'localhost', // Use localhost to connect to the Docker container
-    USER: process.env.POSTGRESDB_USER,
-    PASSWORD: process.env.POSTGRESDB_ROOT_PASSWORD,
-    DB: process.env.POSTGRESDB_DATABASE,
-    port: process.env.POSTGRESDB_LOCAL_PORT,
+    HOST: process.env.DB_HOST,
+    USER: process.env.DB_USER,
+    PASSWORD: process.env.DB_PASSWORD,
+    DB: process.env.DB_NAME,
+    port: process.env.DB_PORT,
     dialect: "postgres",
     pool: {
         max: 5,

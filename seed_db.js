@@ -9,7 +9,6 @@ const pool = new Pool({
 
 const db = require('./app/models');
 
-// Directory containing JSON files
 const dir = 'fixtures';
 
 fs.readdir(dir, async (err, files) => {
@@ -17,6 +16,9 @@ fs.readdir(dir, async (err, files) => {
         console.error('Could not list the directory.', err);
         process.exit(1);
     }
+
+    // let's wipe out the database first
+    await db.sequelize.sync({ force: true });
 
     files.forEach((file, index) => {
         const filePath = path.join(dir, file);
@@ -27,17 +29,13 @@ fs.readdir(dir, async (err, files) => {
                 return;
             }
 
-            // Parse JSON data
             const counties = JSON.parse(data);
-
-            // Extract the filename without the extension to use as the state name
             const stateName = path.basename(file, path.extname(file));
             if (stateName === 'USA-states') {
                 return;
             }
             const state = await db.state.create({ name: stateName });
 
-            // Import data into PostgreSQL
             for (const county of counties) {
                 try {
                     await db.county.create({
@@ -46,7 +44,7 @@ fs.readdir(dir, async (err, files) => {
                         stateId: state.id
                     });
                 } catch (err) {
-                    console.error(`Error importing data into PostgreSQL: ${ filePath }`, err);
+                    console.error(`Error importing data to DB: ${ filePath }`, err);
                 }
             }
         });

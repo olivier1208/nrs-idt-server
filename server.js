@@ -19,13 +19,13 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 
-// db.sequelize.sync({ force: true })
-//     .then(() => {
-//         console.log("⚙️⚙️ Synced db successfully.")
-//     })
-//     .catch((err) => {
-//         console.log("Failed to sync db: " + err.message);
-//     });
+db.sequelize.sync()
+    .then(() => {
+        console.log("⚙️⚙️ Synced db successfully.")
+    })
+    .catch((err) => {
+        console.log("Failed to sync db: " + err.message);
+    });
 
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to IDT/NRS server." });
@@ -67,11 +67,12 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 app.use(
-    "/api-docs",
+    '/_docs',
     swaggerUi.serve,
     swaggerUi.setup(specs)
 );
 
 app.listen(PORT, () => {
     console.log(`🚀🚀 Server up and running on port ${ PORT }.`);
+    console.log(`📃 Swagger docs available at http://localhost:${ PORT }/_docs`);
 });
