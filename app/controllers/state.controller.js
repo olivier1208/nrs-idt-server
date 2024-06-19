@@ -4,7 +4,8 @@ const Op = db.Sequelize.Op;
 
 exports.findAll = (req, res) => {
     const name = req.query.name;
-    const condition = name ? { name: { [Op.iLike]: `%${ name }%` } } : null;
+    const replacedName = name.split('+').join(' ');
+    const condition = name ? { name: { [Op.iLike]: `%${ replacedName }%` } } : null;
 
     State.findAll({ where: condition })
         .then(data => {
@@ -23,7 +24,8 @@ exports.findAll = (req, res) => {
 
 exports.findCountiesByState = (req, res) => {
     const name = req.params.name;
-    State.findOne({ where: { name: name } , include: ["counties"] })
+    const replacedName = name.split('+').join(' ');
+    State.findOne({ where: { name: replacedName }, include: ["counties"] })
         .then(data => {
             if (!data) {
                 res.status(404).send({
