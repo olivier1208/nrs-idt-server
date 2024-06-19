@@ -32,7 +32,7 @@ To get a local copy up and running follow these simple steps.
 
 - Node.js (v20 or higher)
 - Docker
-- Docker Compose
+- Docker Compose (version 3 or higher)
 
 ### Installation
 
@@ -42,38 +42,66 @@ To get a local copy up and running follow these simple steps.
    
     ```
 
-2. Install NPM packages
+2. Copy your `.env.example` file to `.env` and update the values according to your environment
+   ```sh
+   cp .env.example .env
+   ```
+
+3. Install NPM packages
 
    ```sh
       npm install
       ```
-   
+
    or
 
    ```sh
    yarn install
    ```
 
-3. Start the server
+3. Build the containers (Without cache, use `docker compose build --no-cache`)
    ```sh
-    docker compose up -d
-    ```
-   
-4. Run the migrations
-   ```sh
-   npm run db:migrate
+   docker compose build
    ```
-   
+
+4. Start the containers (use `-d` to run in detached mode)
+   ```sh
+    docker compose up
+    ```
+
+4. Run the migrations, to populate the db based on JSON provided
+   ```sh
+   npm run seed:db
+   ```
+
    or
 
    ```sh
-   yarn db:migrate
+   yarn seed:db
    ```
-   
-5. Run the seeders
-   ```sh
 
-6. Access the server at `http://localhost:3000`
+5. Access the server with the port you defined in your .env file at `http://localhost:YOUR_PORT`
+
+## Bonus
+
+The frontend app has been deployed to netlify :)
+In order to use your docker container with the frontend, just use the port 8023 in your .env file
+
+## Possible evolutions
+
+As I was running out of time, here's what I could have implemented over the scope :
+
+- Unit tests
+- Redis Implementation for caching
+- CI/CD pipeline integration with auto deployment
+- Authentication and Authorization
+- Permissions and roles
+- More advanced error handling
+- Logging
+- More advanced validation
+- Better documentation
+- Adding commitizen to enforce a commit message convention
+- Using SemVer to manage the versioning of the app
 
 ## 🤝 Contributing 🤝
 
@@ -84,5 +112,9 @@ Create your Feature Branch (git checkout -b feature/AmazingFeature)
 Commit your Changes (git commit -m 'Add some AmazingFeature')
 Push to the Branch (git push origin feature/AmazingFeature)
 Open a Pull Request
-📜 License 📜
+
+## 📜 License 📜
+
 Distributed under the MIT License. See LICENSE for more information.
+
+Enjoy! 🚀
